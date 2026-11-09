@@ -1,0 +1,164 @@
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f7f7f7;
+  color: #333333;
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
+  max-width: 950px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+}
+
+
+.navbar {
+  background-color: #eeeeee;
+  border-bottom: 1px solid #cccccc;
+  padding: 10px 20px;
+}
+
+
+.login-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  width: 320px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+}
+
+.login-box h2 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  margin-bottom: 3px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #999999;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: normal;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  border: 1px solid #999999;
+  color: #000000;
+}
+
+button:hover {
+  background-color: #d0d0d0;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+table, th, td {
+  border: 1px solid #cccccc;
+}
+
+th {
+  background-color: #f0f0f0;
+  padding: 8px;
+  text-align: left;
+}
+
+td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+
+.error-box {
+  background-color: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #ffcdd2;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.success-box {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #c8e6c9;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-box {
+  background: #ffffff;
+  border: 2px solid #666666;
+  padding: 20px;
+  width: 420px;
+  max-width: 90%;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  margin-top: 15px;
+  text-align: right;
+}
+
+.modal-footer button {
+  margin-left: 8px;
+}
