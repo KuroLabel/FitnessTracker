@@ -24,11 +24,11 @@ class WorkoutLogViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Cada usuario autenticado gestiona solo sus propios registros
+
         return WorkoutLog.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        # Asocia automaticamente el registro al usuario autenticado
+
         serializer.save(user=self.request.user)
 
 
@@ -48,7 +48,7 @@ def login_view(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Django verifica usuario y contrasena (con hash PBKDF2/SHA256)
+
     user = authenticate(username=username, password=password)
 
     if user is not None:

@@ -18,16 +18,29 @@ export default function ModalEliminar({ isOpen, onClose, onConfirm, workout }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <h3 style={{ marginTop: 0, color: '#c00' }}>Confirmar Eliminación</h3>
-        <p>¿Estás seguro de eliminar el registro de <strong>{workout.exercise_name}</strong>?</p>
-        <p style={{ fontSize: '0.85rem', color: '#666' }}>
-          Fecha: {workout.date} | Series: {workout.sets} | Reps: {workout.reps} | Peso: {workout.weight_kg} kg
+        <h3 style={{ marginTop: 0, color: '#dc2626' }}>⚠️ Confirmar Eliminación</h3>
+        <p style={{ marginBottom: '8px' }}>
+          ¿Estás seguro de que deseas eliminar el registro de <strong>{workout.exercise_name}</strong>?
+        </p>
+        <div style={{
+          backgroundColor: '#0f130f',
+          border: '1px solid #2e3d2e',
+          padding: '10px 14px',
+          borderRadius: '8px',
+          fontSize: '0.875rem',
+          color: '#86efac',
+          marginBottom: '10px'
+        }}>
+          <strong>Detalle:</strong> {workout.date} | {workout.sets} series x {workout.reps} reps | {workout.weight_kg} kg
+        </div>
+        <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0 }}>
+          Esta acción no se puede deshacer y borrará el dato en la base de datos SQLite.
         </p>
         <div className="modal-footer">
-          <button type="button" onClick={onClose} disabled={loading}>
+          <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>
             Cancelar
           </button>
-          <button type="button" onClick={handleConfirm} disabled={loading} style={{ color: '#c00' }}>
+          <button type="button" className="btn-danger" onClick={handleConfirm} disabled={loading}>
             {loading ? 'Eliminando...' : 'Sí, Eliminar'}
           </button>
         </div>

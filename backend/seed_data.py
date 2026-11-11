@@ -13,36 +13,35 @@ from rest_framework.authtoken.models import Token
 def seed():
     print("Iniciando carga de datos iniciales...")
 
-    # Crear superusuario admin
-    admin_user, _ = User.objects.get_or_create(
+   
+    admin_user, created_admin = User.objects.get_or_create(
         username='admin',
         defaults={'email': 'admin@fittrack.local', 'first_name': 'Administrador'}
     )
-    admin_user.set_password('admin123')
-    admin_user.is_superuser = True
-    admin_user.is_staff = True
-    admin_user.save()
-    Token.objects.get_or_create(user=admin_user)
-    print("Superusuario 'admin' configurado con contraseña 'admin123'.")
+    if created_admin:
+        admin_user.set_password('admin123')
+        admin_user.is_superuser = True
+        admin_user.is_staff = True
+        admin_user.save()
+        Token.objects.get_or_create(user=admin_user)
+        print("Superusuario 'admin' creado con contraseña 'admin123'.")
+    else:
+        print("Superusuario 'admin' ya existía.")
 
-    # Crear usuario nicolas con contraseña nicolas123
-    nic_user, _ = User.objects.get_or_create(
-        username='nicolas',
-        defaults={'email': 'nicolas@fittrack.local', 'first_name': 'Nicolas'}
+    
+    demo_user, created_demo = User.objects.get_or_create(
+        username='demo',
+        defaults={'email': 'demo@fittrack.local', 'first_name': 'Nicolas', 'last_name': 'Atleta'}
     )
-    nic_user.set_password('nicolas123')
-    nic_user.first_name = 'Nicolas'
-    nic_user.save()
-    Token.objects.get_or_create(user=nic_user)
-    print("Usuario 'nicolas' configurado con contraseña 'nicolas123'.")
+    if created_demo:
+        demo_user.set_password('demo1234')
+        demo_user.save()
+        Token.objects.get_or_create(user=demo_user)
+        print("Usuario 'demo' creado con contraseña 'demo1234'.")
+    else:
+        print("Usuario 'demo' ya existía.")
 
-    # Si existian datos del usuario demo anterior, reasignarlos a nicolas
-    demo_user = User.objects.filter(username='demo').first()
-    if demo_user:
-        WorkoutLog.objects.filter(user=demo_user).update(user=nic_user)
-        print("Registros existentes migrados al usuario 'nicolas'.")
-
-    # Crear registros de entrenamiento de prueba para nicolas
+   
     today = date.today()
     sample_workouts = [
         {
@@ -112,14 +111,14 @@ def seed():
 
     for item in sample_workouts:
         WorkoutLog.objects.get_or_create(
-            user=nic_user,
+            user=demo_user,
             exercise_name=item['exercise_name'],
             date=item['date'],
             defaults=item
         )
 
-    print(f"Total registros para usuario 'nicolas': {WorkoutLog.objects.filter(user=nic_user).count()}")
-    print("Datos iniciales listos con éxito.")
+    print(f"Total registros cargados para usuario 'demo': {WorkoutLog.objects.filter(user=demo_user).count()}")
+    print("Datos iniciales listos con exito.")
 
 
 if __name__ == '__main__':

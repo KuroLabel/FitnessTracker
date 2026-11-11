@@ -12,10 +12,8 @@ router = DefaultRouter()
 router.register(r'workouts', WorkoutLogViewSet, basename='workout')
 
 urlpatterns = [
-    # Endpoints del CRUD RESTful
+
     path('', include(router.urls)),
-    
-    # Endpoints de Autenticacion
     path('auth/login/', login_view, name='auth-login'),
     path('auth/logout/', logout_view, name='auth-logout'),
     path('auth/me/', me_view, name='auth-me'),

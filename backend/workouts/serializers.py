@@ -60,7 +60,6 @@ class WorkoutLogSerializer(serializers.ModelSerializer):
         return value
 
     def validate_date(self, value):
-        # Permite hasta manana para evitar problemas de zona horaria local
         tomorrow = timezone.now().date() + timezone.timedelta(days=1)
         if value > tomorrow:
             raise serializers.ValidationError("La fecha no puede ser futura.")

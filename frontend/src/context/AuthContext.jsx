@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
           const userData = await api.getMe();
           setUser(userData);
         } catch (err) {
-          // Token invalido o vencido
+
           removeStoredToken();
           removeStoredUser();
           setToken(null);

@@ -88,7 +88,7 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         <h3 style={{ marginTop: 0 }}>
-          {isEditing ? 'Editar Ejercicio' : 'Nuevo Ejercicio'}
+          {isEditing ? '✏️ Editar Ejercicio' : '➕ Nuevo Ejercicio'}
         </h3>
 
         {errorMessage && (
@@ -96,16 +96,17 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
         )}
 
         <form onSubmit={handleSubmit}>
-          <label>Nombre del Ejercicio:</label>
+          <label>Nombre del Ejercicio</label>
           <input
             name="exercise_name"
             type="text"
+            placeholder="Ej. Press de Banca Plano"
             value={formData.exercise_name}
             onChange={handleChange}
             required
           />
 
-          <label>Grupo Muscular:</label>
+          <label>Grupo Muscular</label>
           <select
             name="muscle_group"
             value={formData.muscle_group}
@@ -118,7 +119,7 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
             ))}
           </select>
 
-          <label>Fecha:</label>
+          <label>Fecha</label>
           <input
             name="date"
             type="date"
@@ -127,9 +128,9 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
             required
           />
 
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <div style={{ flex: 1 }}>
-              <label>Series:</label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+            <div>
+              <label>Series</label>
               <input
                 name="sets"
                 type="number"
@@ -141,8 +142,8 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
               />
             </div>
 
-            <div style={{ flex: 1 }}>
-              <label>Reps:</label>
+            <div>
+              <label>Reps</label>
               <input
                 name="reps"
                 type="number"
@@ -154,8 +155,8 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
               />
             </div>
 
-            <div style={{ flex: 1 }}>
-              <label>Peso (kg):</label>
+            <div>
+              <label>Peso (kg)</label>
               <input
                 name="weight_kg"
                 type="number"
@@ -169,19 +170,20 @@ export default function ModalEjercicio({ isOpen, onClose, onSave, workoutToEdit 
             </div>
           </div>
 
-          <label>Notas (opcional):</label>
+          <label>Notas / Sensaciones (opcional)</label>
           <input
             name="notes"
             type="text"
+            placeholder="RPE, descansos, etc."
             value={formData.notes}
             onChange={handleChange}
           />
 
           <div className="modal-footer">
-            <button type="button" onClick={onClose} disabled={loading}>
+            <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>
               Cancelar
             </button>
-            <button type="submit" disabled={loading} style={{ fontWeight: 'bold' }}>
+            <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Registro')}
             </button>
           </div>

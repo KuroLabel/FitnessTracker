@@ -93,9 +93,10 @@ export default function DashboardPage() {
       <BarraNav />
 
       <div className="container">
-        <h2>Progreso Diario de Entrenamientos</h2>
-        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '15px' }}>
-        </p>
+        <div className="page-header" style={{ marginBottom: '18px' }}>
+          <h2>Progreso Diario de Entrenamientos</h2>
+          <p>Gestión de ejercicios puro enfasis 6.5</p>
+        </div>
 
         {successMsg && (
           <div className="success-box">{successMsg}</div>
@@ -103,34 +104,36 @@ export default function DashboardPage() {
 
         {error && (
           <div className="error-box">
-            <strong>Error:</strong> {error}
-            <button onClick={fetchWorkouts} style={{ marginLeft: '10px' }}>Reintentar</button>
+            <span><strong>Error:</strong> {error}</span>
+            <button className="btn-secondary" onClick={fetchWorkouts} style={{ padding: '4px 10px', fontSize: '0.8rem' }}>
+              Reintentar
+            </button>
           </div>
         )}
 
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '15px 0' }}>
-          <div>
-            <button onClick={handleOpenCreateModal} style={{ fontWeight: 'bold' }}>
+        <div className="toolbar">
+          <div className="toolbar-group">
+            <button className="btn-primary" onClick={handleOpenCreateModal}>
               + Nuevo Ejercicio
             </button>
-            <button onClick={fetchWorkouts} style={{ marginLeft: '8px' }}>
+            <button className="btn-secondary" onClick={fetchWorkouts}>
               Refrescar
             </button>
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="toolbar-group">
             <input
               type="text"
-              placeholder="Buscar..."
+              placeholder="Buscar ejercicio o nota..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '180px', margin: 0 }}
+              style={{ width: '200px' }}
             />
             <select
               value={filterMuscle}
               onChange={(e) => setFilterMuscle(e.target.value)}
-              style={{ width: '150px', margin: 0 }}
+              style={{ width: '160px' }}
             >
               <option value="ALL">Todos los grupos</option>
               <option value="PECHO">Pecho</option>
@@ -147,54 +150,70 @@ export default function DashboardPage() {
 
 
         {loading && (
-          <p style={{ fontStyle: 'italic', color: '#666' }}>Cargando datos desde la API...</p>
+          <p style={{ fontStyle: 'italic', color: '#64748b', padding: '20px 0', textAlign: 'center' }}>
+            Cargando datos desde la API REST...
+          </p>
         )}
 
 
         {!loading && (
-          <table>
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Ejercicio</th>
-                <th>Grupo</th>
-                <th>Series</th>
-                <th>Reps</th>
-                <th>Peso (kg)</th>
-                <th>Notas</th>
-                <th style={{ width: '140px' }}>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredWorkouts.length === 0 ? (
+          <div className="table-wrapper">
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', color: '#888', padding: '15px' }}>
-                    No hay registros de entrenamiento.
-                  </td>
+                  <th>Fecha</th>
+                  <th>Ejercicio</th>
+                  <th>Grupo</th>
+                  <th>Series</th>
+                  <th>Reps</th>
+                  <th>Peso</th>
+                  <th>Notas</th>
+                  <th style={{ width: '150px', textAlign: 'center' }}>Acciones</th>
                 </tr>
-              ) : (
-                filteredWorkouts.map((workout) => (
-                  <tr key={workout.id}>
-                    <td>{workout.date}</td>
-                    <td><strong>{workout.exercise_name}</strong></td>
-                    <td>{workout.muscle_group}</td>
-                    <td>{workout.sets}</td>
-                    <td>{workout.reps}</td>
-                    <td>{parseFloat(workout.weight_kg) > 0 ? `${workout.weight_kg} kg` : 'Corporal'}</td>
-                    <td style={{ fontSize: '0.85rem', color: '#555' }}>{workout.notes || '-'}</td>
-                    <td>
-                      <button onClick={() => handleOpenEditModal(workout)} style={{ marginRight: '5px' }}>
-                        Editar
-                      </button>
-                      <button onClick={() => handleOpenDeleteModal(workout)} style={{ color: '#c00' }}>
-                        Borrar
-                      </button>
+              </thead>
+              <tbody>
+                {filteredWorkouts.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" style={{ textAlign: 'center', color: '#64748b', padding: '30px' }}>
+                      No se encontraron registros de entrenamiento.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  filteredWorkouts.map((workout) => (
+                    <tr key={workout.id}>
+                      <td style={{ color: '#64748b', fontSize: '0.85rem' }}>{workout.date}</td>
+                      <td><strong>{workout.exercise_name}</strong></td>
+                      <td>
+                        <span className={`badge badge-${(workout.muscle_group || 'otro').toLowerCase()}`}>
+                          {workout.muscle_group}
+                        </span>
+                      </td>
+                      <td>{workout.sets}</td>
+                      <td>{workout.reps}</td>
+                      <td>
+                        <strong>{parseFloat(workout.weight_kg) > 0 ? `${workout.weight_kg} kg` : 'Corporal'}</strong>
+                      </td>
+                      <td style={{ fontSize: '0.85rem', color: '#64748b' }}>{workout.notes || '-'}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          className="action-btn action-edit"
+                          onClick={() => handleOpenEditModal(workout)}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="action-btn action-delete"
+                          onClick={() => handleOpenDeleteModal(workout)}
+                        >
+                          Borrar
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

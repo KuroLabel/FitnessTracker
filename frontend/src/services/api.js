@@ -1,7 +1,3 @@
-/**
- * Servicio de comunicacion con la API REST de Django.
- * Cumple con los criterios A, B, C y E de la pauta.
- */
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
@@ -16,9 +12,7 @@ export const getStoredUser = () => {
 export const setStoredUser = (user) => localStorage.setItem('fittrack_user', JSON.stringify(user));
 export const removeStoredUser = () => localStorage.removeItem('fittrack_user');
 
-/**
- * Cliente HTTP generico con manejo centralizado de cabeceras, tokens y errores REST.
- */
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   const headers = {
@@ -35,11 +29,11 @@ async function request(endpoint, options = {}) {
   try {
     response = await fetch(url, { ...options, headers });
   } catch (err) {
-    // Error de conexion cuando el backend de Django esta apagado
+
     throw new Error('No se pudo conectar con el servidor backend. Asegurate de que Django este ejecutandose.');
   }
 
-  // 204 No Content (como en DELETE exitoso) no tiene cuerpo JSON
+  
   if (response.status === 204) {
     return null;
   }
@@ -53,7 +47,7 @@ async function request(endpoint, options = {}) {
   }
 
   if (!response.ok) {
-    // Manejo estructurado de errores segun el codigo HTTP (Criterio E)
+ 
     let errorMessage = 'Ocurrio un error inesperado.';
 
     if (response.status === 400) {
@@ -61,7 +55,7 @@ async function request(endpoint, options = {}) {
         if (data.error) {
           errorMessage = data.error;
         } else {
-          // Extrae los errores de validacion por campo del serializer
+
           const fieldErrors = Object.entries(data)
             .map(([field, errs]) => `${field}: ${Array.isArray(errs) ? errs.join(', ') : errs}`)
             .join(' | ');
@@ -90,7 +84,7 @@ async function request(endpoint, options = {}) {
 }
 
 export const api = {
-  // Autenticacion
+
   async login(username, password) {
     const data = await request('/auth/login/', {
       method: 'POST',
@@ -124,7 +118,7 @@ export const api = {
     return data;
   },
 
-  // CRUD Workouts (Metodos HTTP correspondientes)
+
   async getWorkouts() {
     return await request('/workouts/');
   },

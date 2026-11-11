@@ -25,10 +25,8 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>FitTrack</h2>
-        <p style={{ marginBottom: '15px', color: '#666' }}>
-          Sistema de Monitoreo Fitness
-        </p>
+        <h2>⚡ FitTrack</h2>
+        <p>Sistema de Monitoreo Fitness</p>
 
         {errorMessage && (
           <div className="error-box">
@@ -37,7 +35,7 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <label>Usuario:</label>
+          <label>Usuario</label>
           <input
             type="text"
             placeholder="Ingresa tu usuario"
@@ -46,7 +44,7 @@ export default function LoginPage() {
             required
           />
 
-          <label>Contraseña:</label>
+          <label>Contraseña</label>
           <input
             type="password"
             placeholder="Ingresa tu contraseña"
@@ -55,8 +53,13 @@ export default function LoginPage() {
             required
           />
 
-          <button type="submit" disabled={loading} style={{ width: '100%', marginTop: '10px' }}>
-            {loading ? 'Entrando...' : 'Iniciar Sesión'}
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={loading}
+            style={{ width: '100%', marginTop: '18px', padding: '11px' }}
+          >
+            {loading ? 'Validando...' : 'Iniciar Sesión'}
           </button>
         </form>
       </div>

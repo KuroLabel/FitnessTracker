@@ -5,16 +5,16 @@ export default function BarraNav() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="navbar">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3 style={{ margin: 0 }}>FitTrack</h3>
-        <div>
-          <span style={{ marginRight: '15px' }}>
-            Usuario: <strong>{user?.username}</strong>
-          </span>
-          <button onClick={logout}>Cerrar Sesión</button>
+    <header className="navbar">
+      <div style={{ maxWidth: '1050px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="nav-brand">
+          <span>⚡ FitTrack</span>
+        </div>
+        <div className="nav-user">
+          <span>Usuario: <strong className="nav-user-badge">{user?.username}</strong></span>
+          <button className="btn-logout" onClick={logout}>Cerrar Sesión</button>
         </div>
       </div>
-    </div>
+    </header>
   );
 }

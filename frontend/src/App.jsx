@@ -17,11 +17,11 @@ export default function App() {
         background: '#f8fafc'
       }}>
         <div className="spinner" style={{ width: '3rem', height: '3rem', marginBottom: '1rem' }} />
-        <p style={{ color: '#64748b', fontWeight: 600 }}>Cargando FitTrack...</p>
+        <p style={{ color: '#64748b', fontWeight: 600 }}>cargando FitTrack</p>
       </div>
     );
   }
 
-  // Rutas protegidas: si no esta autenticado, muestra Login (Criterio C)
+  
   return isAuthenticated ? <DashboardPage /> : <LoginPage />;
 }
