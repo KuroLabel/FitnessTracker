@@ -10,60 +10,84 @@ from .serializers import WorkoutLogSerializer, UserSerializer
 
 
 class WorkoutLogViewSet(viewsets.ModelViewSet):
-    """
-    CRUD completo y RESTful para registros de entrenamiento.
-    Endpoints:
-      - GET    /api/workouts/     -> Listar registros (200 OK)
-      - POST   /api/workouts/     -> Crear registro (201 Created)
-      - GET    /api/workouts/<id>/ -> Detalle (200 OK / 404 Not Found)
-      - PUT    /api/workouts/<id>/ -> Actualizar completo (200 OK)
-      - PATCH  /api/workouts/<id>/ -> Actualizar parcial (200 OK)
-      - DELETE /api/workouts/<id>/ -> Eliminar (204 No Content)
-    """
     serializer_class = WorkoutLogSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-
         return WorkoutLog.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        print("-> sacaste los registro exito")
+        return response
 
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        print("-> exito al ver la ficha (200)")
+        return response
+
+    def get_object(self):
+        try:
+            return super().get_object()
+        except Exception:
+            print("-> error 404 no existe")
+            raise
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            print("-> mandando datos errones (error 400)")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        print("-> Guardado perfecto")
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        print("-> actualizando")
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        print("-> borrado con exito")
+        return response
 
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
-    """
-    Valida credenciales contra la BD (password hasheado) y retorna token de sesion.
-    Retorna 200 OK con token y datos de usuario o 400 Bad Request si fallan las credenciales.
-    """
     username = request.data.get('username', '').strip()
     password = request.data.get('password', '')
 
     if not username or not password:
+        print("-> error 400 mal ahi")
         return Response(
             {'error': 'Debe proporcionar tanto usuario como contraseña.'},
             status=status.HTTP_400_BAD_REQUEST
         )
 
-
     user = authenticate(username=username, password=password)
 
     if user is not None:
         if not user.is_active:
+            print("-> error 401 no puedes meterte a los datos")
             return Response(
                 {'error': 'Esta cuenta de usuario esta inactiva.'},
                 status=status.HTTP_403_FORBIDDEN
             )
         token, _ = Token.objects.get_or_create(user=user)
+        print("-> Iniciando 🔥")
         return Response({
             'token': token.key,
             'user': UserSerializer(user).data,
             'message': 'Inicio de sesion exitoso.'
         }, status=status.HTTP_200_OK)
     else:
+        print("-> error 400 mal ahi")
         return Response(
             {'error': 'Credenciales invalidas. Verifique su usuario y contraseña.'},
             status=status.HTTP_400_BAD_REQUEST
@@ -73,9 +97,6 @@ def login_view(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def logout_view(request):
-    """
-    Cierre de sesion: elimina el token de la base de datos para invalidarlo.
-    """
     try:
         request.user.auth_token.delete()
     except Exception:
@@ -89,18 +110,12 @@ def logout_view(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def me_view(request):
-    """
-    Retorna la informacion del usuario actualmente autenticado con su token.
-    """
     return Response(UserSerializer(request.user).data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def register_view(request):
-    """
-    Permite registrar un nuevo usuario para probar el sistema facilmente.
-    """
     username = request.data.get('username', '').strip()
     password = request.data.get('password', '')
     email = request.data.get('email', '').strip()

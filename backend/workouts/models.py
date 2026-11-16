@@ -18,8 +18,7 @@ class WorkoutLog(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='workout_logs',
-        help_text='Usuario que registro el entrenamiento'
+        related_name='workout_logs'
     )
     exercise_name = models.CharField(
         max_length=100,

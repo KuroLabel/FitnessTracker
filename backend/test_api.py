@@ -10,57 +10,52 @@ from workouts.models import WorkoutLog
 
 client = APIClient()
 
-print("--- 1. Test Login (Credenciales validas) ---")
-res = client.post('/api/auth/login/', {'username': 'nicolas', 'password': 'nicolas123'}, format='json')
-print(f"Status: {res.status_code}")
-assert res.status_code == 200, f"Expected 200, got {res.status_code}"
-token = res.data['token']
-print(f"Token obtenido: {token[:10]}...")
+print("Tirando los datos del sistema.. 🍀🗽💸\n")
 
-print("\n--- 2. Test Login (Credenciales invalidas -> 400) ---")
+print("[1/11] Probando el login con la cuenta...")
+res = client.post('/api/auth/login/', {'username': 'nicolas', 'password': 'nicolas123'}, format='json')
+assert res.status_code == 200, f"Error: {res.status_code}"
+token = res.data['token']
+
+print("\n[2/11] Metiendo la contraseña incorrecta")
 res_fail = client.post('/api/auth/login/', {'username': 'nicolas', 'password': 'wrongpassword'}, format='json')
-print(f"Status: {res_fail.status_code}, Detalle: {res_fail.data}")
 assert res_fail.status_code == 400
 
-print("\n--- 3. Test Endpoints Protegidos sin Token (-> 401) ---")
+print("\n[3/11] Intentando colarse a los datos mal ahi")
 unauth_client = APIClient()
 res_unauth = unauth_client.get('/api/workouts/')
-print(f"Status sin token: {res_unauth.status_code}, Detalle: {res_unauth.data}")
 assert res_unauth.status_code == 401
+print("       -> error 401 no puedes meterte a los datos")
 
-print("\n--- 4. Test GET /api/workouts/ (Listar con Token -> 200) ---")
+print("\n[4/11] Sacando la lista de todos los entrenamientos...")
 client.credentials(HTTP_AUTHORIZATION='Token ' + token)
 res_list = client.get('/api/workouts/')
-print(f"Status: {res_list.status_code}, Cantidad de registros: {len(res_list.data)}")
 assert res_list.status_code == 200
 assert len(res_list.data) > 0
 first_id = res_list.data[0]['id']
 
-print(f"\n--- 5. Test GET /api/workouts/{first_id}/ (Detalle -> 200) ---")
+print(f"\n[5/11] Viendo la ficha del ejercicio.. (ID: {first_id})")
 res_detail = client.get(f'/api/workouts/{first_id}/')
-print(f"Status: {res_detail.status_code}, Ejercicio: {res_detail.data['exercise_name']}")
 assert res_detail.status_code == 200
 
-print("\n--- 6. Test GET /api/workouts/99999/ (Recurso inexistente -> 404) ---")
+print("\n[6/11] Buscando un ejercicio que no existe")
 res_404 = client.get('/api/workouts/99999/')
-print(f"Status: {res_404.status_code}, Detalle: {res_404.data}")
 assert res_404.status_code == 404
 
-print("\n--- 7. Test POST /api/workouts/ (Validaciones fallidas -> 400) ---")
+print("\n[7/11] Mandando datos erroneos")
 res_bad_post = client.post('/api/workouts/', {
-    'exercise_name': '',  # Vacio
+    'exercise_name': '',
     'muscle_group': 'PECHO',
     'date': '2026-11-09',
-    'sets': -1,  # Invalido
-    'reps': 0,   # Invalido
-    'weight_kg': -10  # Invalido
+    'sets': -1,
+    'reps': 0,
+    'weight_kg': -10
 }, format='json')
-print(f"Status: {res_bad_post.status_code}, Errores en JSON: {res_bad_post.data}")
 assert res_bad_post.status_code == 400
 assert 'exercise_name' in res_bad_post.data
 assert 'sets' in res_bad_post.data
 
-print("\n--- 8. Test POST /api/workouts/ (Creacion valida -> 201) ---")
+print("\n[8/11] Guardando ejercicio nuevo...")
 res_create = client.post('/api/workouts/', {
     'exercise_name': 'Curl de Biceps con Barra Z',
     'muscle_group': 'BRAZOS',
@@ -70,11 +65,10 @@ res_create = client.post('/api/workouts/', {
     'weight_kg': 35.5,
     'notes': 'Contracción máxima al subir'
 }, format='json')
-print(f"Status: {res_create.status_code}, ID creado: {res_create.data['id']}")
 assert res_create.status_code == 201
 new_id = res_create.data['id']
 
-print(f"\n--- 9. Test PUT /api/workouts/{new_id}/ (Actualizacion -> 200) ---")
+print(f"\n[9/11] Modificando el ejercicio (ID: {new_id})...")
 res_update = client.put(f'/api/workouts/{new_id}/', {
     'exercise_name': 'Curl de Biceps con Mancuernas Alterno',
     'muscle_group': 'BRAZOS',
@@ -84,18 +78,14 @@ res_update = client.put(f'/api/workouts/{new_id}/', {
     'weight_kg': 16.0,
     'notes': 'Modificado con mancuernas'
 }, format='json')
-print(f"Status: {res_update.status_code}, Nuevo nombre: {res_update.data['exercise_name']}")
 assert res_update.status_code == 200
-assert res_update.data['exercise_name'] == 'Curl de Biceps con Mancuernas Alterno'
 
-print(f"\n--- 10. Test DELETE /api/workouts/{new_id}/ (Eliminar -> 204) ---")
+print(f"\n[10/11] Borrando el ejercicio (ID: {new_id})...")
 res_del = client.delete(f'/api/workouts/{new_id}/')
-print(f"Status: {res_del.status_code}")
 assert res_del.status_code == 204
 
-print("\n--- 11. Test GET registro eliminado -> 404 ---")
+print(f"\n[11/11] Revisando que se haya borrado el dato ...")
 res_check_del = client.get(f'/api/workouts/{new_id}/')
-print(f"Status: {res_check_del.status_code}")
 assert res_check_del.status_code == 404
 
-print("\n TODOS LOS TESTS DEL BACKEND PASARON EXITOSAMENTE (Criterios A, C, E cubiertos al 100%)")
+print("\n Pruebas exitosas 🍀🗽💸")

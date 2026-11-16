@@ -8,7 +8,7 @@ def api_root_view(request):
         'name': 'FitTrack REST API',
         'status': 'online',
         'version': '1.0.0',
-        'documentation': 'Proyecto Final - Desarrollo de Aplicaciones Web',
+        'documentation': 'FitTrack API Documentation',
         'endpoints': {
             'workouts_crud': '/api/workouts/',
             'auth_login': '/api/auth/login/',
@@ -17,7 +17,7 @@ def api_root_view(request):
             'admin_panel': '/admin/',
         },
         'frontend_url': 'http://localhost:5173/',
-        'message': 'El backend está funcionando correctamente. Abre el frontend en http://localhost:5173/'
+        'message': 'API en línea'
     })
 
 
