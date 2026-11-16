@@ -30,7 +30,7 @@ async function request(endpoint, options = {}) {
     response = await fetch(url, { ...options, headers });
   } catch (err) {
 
-    throw new Error('No se pudo conectar con el servidor backend. Asegurate de que Django este ejecutandose.');
+    throw new Error('No se pudo conectar con el servidor. Por favor, intenta nuevamente más tarde.');
   }
 
   
@@ -69,9 +69,9 @@ async function request(endpoint, options = {}) {
     } else if (response.status === 403) {
       errorMessage = 'No tienes permisos para realizar esta operacion.';
     } else if (response.status === 404) {
-      errorMessage = 'El recurso solicitado no fue encontrado en el servidor (404 Not Found).';
+      errorMessage = 'El recurso solicitado no fue encontrado.';
     } else if (response.status >= 500) {
-      errorMessage = 'Error interno del servidor (500). Por favor, revisa la consola de Django.';
+      errorMessage = 'Ocurrió un error en el servidor. Por favor, intenta más tarde.';
     }
 
     const error = new Error(errorMessage);
@@ -86,13 +86,19 @@ async function request(endpoint, options = {}) {
 export const api = {
 
   async login(username, password) {
-    const data = await request('/auth/login/', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-    });
-    setStoredToken(data.token);
-    setStoredUser(data.user);
-    return data;
+    try {
+      const data = await request('/auth/login/', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+      });
+      setStoredToken(data.token);
+      setStoredUser(data.user);
+      console.log("-> Iniciando 🔥");
+      return data;
+    } catch (err) {
+      console.log("-> error 400 mal ahi");
+      throw err;
+    }
   },
 
   async logout() {
@@ -120,21 +126,28 @@ export const api = {
 
 
   async getWorkouts() {
-    return await request('/workouts/');
+    const data = await request('/workouts/');
+    console.log("-> sacaste los registro exito");
+    return data;
   },
 
   async getWorkout(id) {
-    return await request(`/workouts/${id}/`);
+    const data = await request(`/workouts/${id}/`);
+    console.log("-> exito al ver la ficha (200)");
+    return data;
   },
 
   async createWorkout(workoutData) {
-    return await request('/workouts/', {
+    const data = await request('/workouts/', {
       method: 'POST',
       body: JSON.stringify(workoutData),
     });
+    console.log("-> Guardado perfecto");
+    return data;
   },
 
   async updateWorkout(id, workoutData) {
+    console.log("-> actualizando");
     return await request(`/workouts/${id}/`, {
       method: 'PUT',
       body: JSON.stringify(workoutData),
@@ -142,8 +155,10 @@ export const api = {
   },
 
   async deleteWorkout(id) {
-    return await request(`/workouts/${id}/`, {
+    const data = await request(`/workouts/${id}/`, {
       method: 'DELETE',
     });
+    console.log("-> borrado con exito");
+    return data;
   },
 };

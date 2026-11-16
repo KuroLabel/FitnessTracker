@@ -25,8 +25,8 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>⚡ FitTrack</h2>
-        <p>Sistema de Monitoreo Fitness</p>
+        <h2>FitTrack 🗽</h2>
+        <p>Metiendole puro enfasi al gym 🍀💸🗽💯</p>
 
         {errorMessage && (
           <div className="error-box">

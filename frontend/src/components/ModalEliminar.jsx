@@ -34,7 +34,7 @@ export default function ModalEliminar({ isOpen, onClose, onConfirm, workout }) {
           <strong>Detalle:</strong> {workout.date} | {workout.sets} series x {workout.reps} reps | {workout.weight_kg} kg
         </div>
         <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0 }}>
-          Esta acción no se puede deshacer y borrará el dato en la base de datos SQLite.
+          Esta acción no se puede deshacer.
         </p>
         <div className="modal-footer">
           <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>

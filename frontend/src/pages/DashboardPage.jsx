@@ -94,8 +94,8 @@ export default function DashboardPage() {
 
       <div className="container">
         <div className="page-header" style={{ marginBottom: '18px' }}>
-          <h2>Progreso Diario de Entrenamientos</h2>
-          <p>Gestión de ejercicios puro enfasis 6.5</p>
+          <h2>Progreso Diario 🦾🔥</h2>
+          <p>Puro entrenamiento activo 🥷💸</p>
         </div>
 
         {successMsg && (
@@ -115,7 +115,7 @@ export default function DashboardPage() {
         <div className="toolbar">
           <div className="toolbar-group">
             <button className="btn-primary" onClick={handleOpenCreateModal}>
-              + Nuevo Ejercicio
+              + Nuevo Ejercicio 💸
             </button>
             <button className="btn-secondary" onClick={fetchWorkouts}>
               Refrescar
@@ -151,7 +151,7 @@ export default function DashboardPage() {
 
         {loading && (
           <p style={{ fontStyle: 'italic', color: '#64748b', padding: '20px 0', textAlign: 'center' }}>
-            Cargando datos desde la API REST...
+            Cargando entrenamientos...
           </p>
         )}
 
